@@ -37,7 +37,7 @@ classdef Coordinator < handle
             % Inicializar a configuração do robô no GAZEBO
             configResp = setCurrentRobotJConfig(obj, initialRobotJConfig);
             
-            % Retome a física do GAZEBO
+            % Retomar a física do GAZEBO
             physicsClient = rossvcclient('gazebo/unpause_physics');
             physicsResp = call(physicsClient,'Timeout',3);
             
