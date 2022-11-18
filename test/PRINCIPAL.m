@@ -1,4 +1,4 @@
-rosIP = '192.168.241.129';
+rosIP = '192.168.222.128';
 rosshutdown;
 rosinit(rosIP,11311);
 

@@ -1,4 +1,16 @@
 function MoveTo(coordinator, taskConfig)
+
+    % First, check if robot is already at destination
+    ik = inverseKinematics("RigidBodyTree", coordinator.Robot);
+    warning('off','robotics:robotmanip:rigidbodytree:ConfigJointLimitsViolationAutoAdjusted');
+    rng(2); 
+    [goalConfig, solInfo] = ik(coordinator.RobotEndEffector, ...
+    taskConfig, ones(1,6), ...
+    coordinator.CurrentRobotJConfig);
+    if solInfo.PoseErrorNorm>=0.01       
+         disp("Warning: the Inverse Kinematic solver failed to converge.");
+    end
+    
     isAway = checkTargetAchieved();
 
     if isAway % se o robô não estiver na pose desejada, planeje um movimento
@@ -18,7 +30,7 @@ function MoveTo(coordinator, taskConfig)
         Te_0 = taskConfig;
         searchiter=1;
         while(any(checkCollision(coordinator.Robot, goalConfig, coordinator.World)))
-            Te_0 = exampleHelperSampleWGRROSGazeboScene(Te_w, Tw_0, bounds);
+            Te_0 = SampleWGR(Te_w, Tw_0, bounds);
             [goalConfig, ~] = ik(coordinator.RobotEndEffector, ...
                 Te_0, ones(1,6), ...
                 coordinator.Robot.homeConfiguration);
