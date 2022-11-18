@@ -29,7 +29,7 @@ function MoveTo(coordinator, taskConfig)
         -0.001, 0.001;];
         Te_0 = taskConfig;
         searchiter=1;
-        while(any(checkCollision(coordinator.Robot, goalConfig, coordinator.World)))
+        while(any(checkCollision(coordinator.Robot, goalConfig, coordinator.World, SkippedSelfCollisions = 'parent')))
             Te_0 = SampleWGR(Te_w, Tw_0, bounds);
             [goalConfig, ~] = ik(coordinator.RobotEndEffector, ...
                 Te_0, ones(1,6), ...
@@ -45,7 +45,7 @@ function MoveTo(coordinator, taskConfig)
         planner.ValidationDistance=0.2;
         planner.EnableConnectHeuristic=true;
         path = planner.plan(startConfig, goalConfig);
-        path=planner.shorten(path,40);
+        path = planner.shorten(path,40);
         %% Interpolar caminho
         planner.ValidationDistance=0.02;
         positions = interpolate(planner, path);
